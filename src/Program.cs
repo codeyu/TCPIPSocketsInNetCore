@@ -7,6 +7,14 @@ namespace TCPIPSocketsInNetCore
         public static void Main(string[] args)
         {
             IPAddressExample.PrintHostInfo();
+            if(args[0] == "s")
+            {
+                TcpEchoServer.TestServer(new string[]{"6666"});
+            }
+            else if(args[0] == "c" && args.Length==3)
+            {
+                TcpEchoClient.TestClient(new string[]{args[1], args[2]});
+            }
             foreach (String arg in args) 
             {
                 Console.WriteLine(arg + ":");
