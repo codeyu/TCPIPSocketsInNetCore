@@ -9,12 +9,12 @@ namespace TCPIPSocketsInNetCore
     {
         public static void TestClient(string[] args)
         {
-            if (args.Length != 2) 
+            if (args.Length != 1) 
             {
-                throw new ArgumentException("Parameters: <Server>[:<Port>] <Word>");
+                throw new ArgumentException("Parameters: <Server>[:<Port>]");
             }
             string server = (args[0].Contains(":")) ? args[0].Split(':')[0] : args[0];
-            byte[] byteBuffer = Encoding.ASCII.GetBytes(args[1]);
+            
             int servPort = (args[0].Contains(":")) ? Int32.Parse(args[0].Split(':')[1]) : 7;
             TcpClient client = null;
             NetworkStream netStream = null;
@@ -25,26 +25,40 @@ namespace TCPIPSocketsInNetCore
                 client.NoDelay = true;//!!!
                 if(client.Connected)
                 {
-                    Console.WriteLine("Connected to server... sending echo string");
-                    netStream = client.GetStream();
-                    netStream.Write(byteBuffer, 0, byteBuffer.Length);
-                    Console.WriteLine("Sent {0} bytes to server...", byteBuffer.Length);
-                    int totalBytesRcvd = 0;
-                    int bytesRcvd = 0;
-                    while (totalBytesRcvd < byteBuffer.Length) 
+                    Console.WriteLine("Connected to server...");
+                    while(true)
                     {
-                        if ((bytesRcvd = netStream.Read(byteBuffer, totalBytesRcvd,
-                            byteBuffer.Length - totalBytesRcvd)) == 0)
+                        netStream = client.GetStream();
+                        if(netStream.CanRead)
                         {
-                                Console.WriteLine("Connection closed prematurely.");
-                                break;
+                            byte[] buffer = new byte[1024]; 
+                            netStream.Read(buffer, 0, buffer.Length);
+                            Console.WriteLine(Encoding.ASCII.GetString(buffer));
                         }
-                        totalBytesRcvd += bytesRcvd;
+                        var str = Console.ReadLine();
+                        
+                        if(netStream.CanWrite)
+                        {
+                            byte[] byteBuffer = Encoding.ASCII.GetBytes(str);
+                            netStream.Write(byteBuffer, 0, byteBuffer.Length);
+                            Console.WriteLine("Sent {0} bytes to server...", byteBuffer.Length);
+                            
+                        }
+                        if(str == "quit")
+                        {
+                            Console.WriteLine("Closing connection. goodbye~~"); 
+                            netStream.Dispose();
+                            client.Dispose();
+                            break;
+                        }
                     }
-                    Console.WriteLine("Received {0} bytes from server: {1}", totalBytesRcvd,
-                                    Encoding.ASCII.GetString(byteBuffer, 0, totalBytesRcvd));
+                    
+                    
                 }
-                Console.WriteLine($"Can't connect to server {server}:{servPort}. Try again...");
+                else
+                {
+                    Console.WriteLine($"Can't connect to server {server}:{servPort}. Try again...");
+                }
                 
                 
             }
