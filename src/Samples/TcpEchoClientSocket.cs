@@ -6,7 +6,7 @@ namespace TCPIPSocketsInNetCore
 {
     public class TcpEchoClientSocket
     {
-        public static void SocketClientTest(string[] args)
+        public static void Run(string[] args)
         {
             if ((args.Length < 2) || (args.Length > 3))
             { // Test for correct # of args

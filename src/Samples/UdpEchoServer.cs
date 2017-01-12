@@ -5,7 +5,7 @@ namespace TCPIPSocketsInNetCore
 {
     public class UdpEchoServer
     {
-        public static void TestUdpServer(string[] args)
+        public static void Run(string[] args)
         {
             if (args.Length > 1)
             {

@@ -8,7 +8,7 @@ namespace TCPIPSocketsInNetCore
     public class TcpEchoServer
     {
         private const int BUFSIZE = 32;
-        public static void TestServer(string[] args)
+        public static void Run(string[] args)
         {
             if (args.Length > 1)
                 throw new ArgumentException("Parameters: [<Port>]");

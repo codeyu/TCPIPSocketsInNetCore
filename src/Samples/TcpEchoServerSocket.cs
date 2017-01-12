@@ -9,7 +9,7 @@ namespace TCPIPSocketsInNetCore
     {
         private const int BUFSIZE = 32; // Size of receive buffer
         private const int BACKLOG = 5;  // Outstanding connection queue max size
-        public static void SocketServerTest(string[] args)
+        public static void Run(string[] args)
         {
 
             if (args.Length > 1) //

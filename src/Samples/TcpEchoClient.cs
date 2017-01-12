@@ -7,7 +7,7 @@ namespace TCPIPSocketsInNetCore
 {
     public class TcpEchoClient
     {
-        public static void TestClient(string[] args)
+        public static void Run(string[] args)
         {
             if (args.Length != 1) 
             {

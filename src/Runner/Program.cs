@@ -27,7 +27,7 @@ namespace ConsoleApplication
                     Console.WriteLine($"{i},{ass2.ExportedTypes.ElementAt(i)}");
                 }
                 var curInsance = Activator.CreateInstance(dictTypes[4]);
-                curInsance.GetType().GetMethod("SocketServerTest", BindingFlags.Public | BindingFlags.Static).Invoke(null,new object[] { new string[] { "5000" } });
+                curInsance.GetType().GetMethod("Run", BindingFlags.Public | BindingFlags.Static).Invoke(null,new object[] { new string[] { "5000" } });
             }
         }
         public static IEnumerable<Assembly> GetReferencingAssemblies(string assemblyName)
