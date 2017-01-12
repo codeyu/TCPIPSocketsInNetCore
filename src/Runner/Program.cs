@@ -17,17 +17,28 @@ namespace ConsoleApplication
             {
                 System.Console.WriteLine(ass[i].FullName);
             }
-            var ass2 = GetReferencingAssemblies("Samples").Where(x=>x.FullName.StartsWith("Samples")).FirstOrDefault();
-            if(ass2 != null)
+            var assemblySamples = GetReferencingAssemblies("Samples").Where(x=>x.FullName.StartsWith("Samples")).FirstOrDefault();
+            if(assemblySamples != null)
             {
                 var dictTypes = new Dictionary<int,Type>();
-                for(var i = 0; i < ass2.ExportedTypes.Count(); i++)
+                var typesCount = assemblySamples.ExportedTypes.Count();
+                for(var i = 0; i < typesCount; i++)
                 {
-                    dictTypes.Add(i, ass2.ExportedTypes.ElementAt(i));
-                    Console.WriteLine($"{i},{ass2.ExportedTypes.ElementAt(i)}");
+                    dictTypes.Add(i, assemblySamples.ExportedTypes.ElementAt(i));
+                    Console.WriteLine($"{i},{assemblySamples.ExportedTypes.ElementAt(i)}");
                 }
-                var curInsance = Activator.CreateInstance(dictTypes[4]);
-                curInsance.GetType().GetMethod("Run", BindingFlags.Public | BindingFlags.Static).Invoke(null,new object[] { new string[] { "5000" } });
+                Console.WriteLine("Please input type index you want to run:");
+                var typeIndex = Console.ReadLine();
+                var index = -1;
+                while(string.IsNullOrEmpty(typeIndex) || !int.TryParse(typeIndex, out index) || index >= typesCount || index < 0)
+                {
+                    Console.WriteLine("Input error! Please reinput:");
+                    typeIndex = Console.ReadLine();
+                }
+                var curInsance = Activator.CreateInstance(dictTypes[index]);
+                Console.WriteLine("Please input method params:");
+                var param = Console.ReadLine().Split(' ');
+                curInsance.GetType().GetMethod("Run", BindingFlags.Public | BindingFlags.Static).Invoke(null,new object[] { param });
             }
         }
         public static IEnumerable<Assembly> GetReferencingAssemblies(string assemblyName)
