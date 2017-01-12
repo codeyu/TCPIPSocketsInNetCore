@@ -5,6 +5,7 @@
     "emitEntryPoint": true
   },
   "dependencies": {
+    "Microsoft.Extensions.DependencyModel" : "1.1.0",
     "System.Runtime.Loader": "4.3.0",
     "Samples": {
             "version": "1.0.0-*",
