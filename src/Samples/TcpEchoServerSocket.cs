@@ -1,6 +1,7 @@
 using System;             // For Console, Int32, ArgumentException, Environment
 using System.Net;         // For IPAddress
 using System.Net.Sockets; // For TcpListener, TcpClient
+using System.Text;
 
 namespace TCPIPSocketsInNetCore
 {
@@ -8,7 +9,7 @@ namespace TCPIPSocketsInNetCore
     {
         private const int BUFSIZE = 32; // Size of receive buffer
         private const int BACKLOG = 5;  // Outstanding connection queue max size
-        static void SocketServerTest(string[] args)
+        public static void SocketServerTest(string[] args)
         {
 
             if (args.Length > 1) //
@@ -34,17 +35,20 @@ namespace TCPIPSocketsInNetCore
                 Socket client = null;
                 try
                 {
+                    Console.WriteLine("Waiting for client...");
                     client = server.Accept(); // Get client connection
-                    Console.Write("Handling client at " + client.RemoteEndPoint + " - ");
+                    Console.WriteLine($"Server started. Listening to TCP clients at {client.RemoteEndPoint}");  
                     // Receive until client closes connection, indicated by 0 return value
                     int totalBytesEchoed = 0;
                     while ((bytesRcvd = client.Receive(rcvBuffer, 0, rcvBuffer.Length,
-                                                    SocketFlags.None)) > 0)
+                                                    SocketFlags.None)) > 0 && Encoding.ASCII.GetString(rcvBuffer) != "quit")
                     {
-                        client.Send(rcvBuffer, 0, bytesRcvd, SocketFlags.None);
+                        byte[] data = Encoding.ASCII.GetBytes("Send next data: [enter 'quit' to terminate] ");
+                        client.Send(data, 0, data.Length, SocketFlags.None);
                         totalBytesEchoed += bytesRcvd;
+                        Console.WriteLine(Encoding.ASCII.GetString(rcvBuffer));
                     }
-                    Console.WriteLine("echoed {0} bytes.", totalBytesEchoed);
+                    Console.WriteLine($"Closing connection, echoed {totalBytesEchoed} bytes.");
                     client.Dispose();   // Close the socket. We are done with this client!
                 }
                 catch (Exception ex)

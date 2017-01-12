@@ -5,6 +5,7 @@
     "emitEntryPoint": true
   },
   "dependencies": {
+    "System.Runtime.Loader": "4.3.0",
     "Samples": {
             "version": "1.0.0-*",
             "target": "project"

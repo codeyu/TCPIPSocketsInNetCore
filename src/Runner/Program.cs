@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
+using System.Runtime.Loader;
 
 namespace ConsoleApplication
 {
@@ -6,7 +9,8 @@ namespace ConsoleApplication
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var port = Console.ReadLine();
+            TCPIPSocketsInNetCore.TcpEchoServerSocket.SocketServerTest(new[]{port});
         }
     }
 }
